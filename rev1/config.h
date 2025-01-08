@@ -42,7 +42,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define WS2812_DI_PIN GP20
 #define RGBLED_NUM 24
 #define RGBLED_SPLIT {12, 12}
-#define RGBLIGHT_LED_COUNT RGB_NUM
+#define RGBLIGHT_LED_COUNT RGBLED_NUM
 
 /* serial.c configuration for split keyboard */
 //#define WS2812_PIO_USE_PIO1 // Force the usage of PIO1 peripheral, by default the WS2812 implementation uses the PIO0 peripheral
@@ -57,3 +57,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define I2C1_SCL_PIN GP27
 #define ENCODERS_PAD_A { GP11 }
 #define ENCODERS_PAD_B { GP12 }
+
+#define OLED_FONT_H "../oled/oled_font.c"
+
+#define SPLIT_OLED_ENABLE
+#define SPLIT_ACTIVITY_ENABLE
+

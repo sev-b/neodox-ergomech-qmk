@@ -17,4 +17,10 @@
 
 //Setting up what encoder rotation does. If your encoder can be pressed as a button, that function can be set in Via.
 
-
+#if defined(ENCODER_MAP_ENABLE)
+const uint16_t PROGMEM encoder_map[][2][2] = {
+    [0] =   { ENCODER_CCW_CW( KC_VOLU,KC_VOLD), ENCODER_CCW_CW(KC_MS_WH_UP, KC_MS_WH_DOWN)  },
+    [1] =   { ENCODER_CCW_CW( KC_VOLU,KC_VOLD), ENCODER_CCW_CW(KC_MS_WH_UP, KC_MS_WH_DOWN)  },
+    //                  Encoder 1                                     Encoder 2
+};
+#endif
