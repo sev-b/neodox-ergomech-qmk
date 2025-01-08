@@ -20,18 +20,22 @@ void render_animation(int X, int Y, int anim_size, char animation[][anim_size], 
     }
 
     // animation timer
-    if (timer_elapsed32(anim_timer) > anim_frame_duration) {
+    if(timer_elapsed32(anim_timer) > anim_frame_duration) {
         anim_timer = timer_read32();
+        current_wpm = get_current_wpm();
         animation_phase();
     }
 
     // this fixes the screen on and off bug
-    if (timer_elapsed32(anim_sleep) > OLED_TIMEOUT) {
+    if (current_wpm > 0) {
+        oled_on();
+        anim_sleep = timer_read32();
+    } else if(timer_elapsed32(anim_sleep) > OLED_TIMEOUT) {
         oled_off();
     }
 }
 
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+/* bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (record->event.pressed) {
         if (!is_oled_on()) {
             oled_on();
@@ -44,4 +48,4 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         anim_sleep = timer_read32();
     }
     return true;
-}
+} */

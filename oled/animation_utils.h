@@ -18,4 +18,6 @@
 
 #pragma once
 
+extern int current_wpm;
+
 void render_animation(int X, int Y, int anim_size, char animation[][anim_size], int anim_frame_duration, int anim_frame_count);

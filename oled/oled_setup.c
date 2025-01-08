@@ -37,6 +37,7 @@ void render_status_modern(void) {
     oled_write_P((get_mods() | get_oneshot_mods()) & MOD_MASK_GUI ? PSTR("WIN\07\10") : PSTR("WIN\05\06"), false);
 
     char buf[16];
+    current_wpm = get_current_wpm();
     if (current_wpm < 10)
         sprintf(buf, "WPM %d", current_wpm);
     else if (current_wpm < 100)
@@ -56,7 +57,6 @@ oled_rotation_t oled_init_user(oled_rotation_t rotation) {
 
 bool oled_task_user(void) {
     // oled_clear();
-    current_wpm = get_current_wpm();
     if (is_keyboard_master()) {
         render_status_modern();
         led_usb_state = host_keyboard_led_state();
