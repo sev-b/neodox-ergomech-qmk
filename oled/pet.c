@@ -1,9 +1,6 @@
 #include "pet.h"
 #include "animation_utils.h"
 
-// status variables
-led_t led_usb_state = {.num_lock = false, .caps_lock = false, .scroll_lock = false};
-
 #define OLED_PET_MAX_FRAMES 3
 #define PET_FRAME_DURATION 200
 
@@ -103,7 +100,7 @@ void render_pet(uint8_t col, uint8_t line) {
 
 uint32_t pet_animation_phases(uint32_t triger_time, void *cb_arg) {
     static uint32_t anim_frame_duration = PET_FRAME_DURATION;
-    if (led_usb_state.caps_lock) {
+    if (host_keyboard_led_state().caps_lock) {
         pet_animation_type = 0;
         anim_frame_duration = update_animation_frame(&pet_animation_frame, OLED_BARK_FRAMES, PET_FRAME_DURATION);
     } else if (get_current_wpm() <= OLED_SIT_SPEED) {

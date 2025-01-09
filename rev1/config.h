@@ -57,8 +57,3 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define I2C1_SCL_PIN GP27
 #define ENCODERS_PAD_A { GP11 }
 #define ENCODERS_PAD_B { GP12 }
-
-#define OLED_FONT_H "../oled/oled_font.c"
-
-#define SPLIT_ACTIVITY_ENABLE
-#define SPLIT_WPM_ENABLE
