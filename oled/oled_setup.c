@@ -19,50 +19,28 @@
 
 #ifdef OLED_ENABLE
 #    include "progmem.h"
+#    include "status.c"
 #    include "animation_utils.c"
-#    include "luna.c"
-#    include "superloop.c"
-
-int current_wpm = 0;
-
-void render_status_modern(void) {
-    oled_set_cursor(0, 1);
-    led_t led_usb_state = host_keyboard_led_state();
-    oled_write_P(led_usb_state.caps_lock ? PSTR("CPS\07\10") : PSTR("CPS\05\06"), false);
-    oled_set_cursor(0, 3);
-    oled_write_P((get_mods() | get_oneshot_mods()) & MOD_MASK_ALT ? PSTR("ALT\07\10") : PSTR("ALT\05\06"), false);
-    oled_write_P((get_mods() | get_oneshot_mods()) & MOD_MASK_CTRL ? PSTR("CTL\07\10") : PSTR("CTL\05\06"), false);
-    oled_write_P(get_highest_layer(layer_state) == 1 ? PSTR("FUN\07\10") : PSTR("FUN\05\06"), false);
-    oled_write_P((get_mods() | get_oneshot_mods()) & MOD_MASK_SHIFT ? PSTR("SFT\07\10") : PSTR("SFT\05\06"), false);
-    oled_write_P((get_mods() | get_oneshot_mods()) & MOD_MASK_GUI ? PSTR("WIN\07\10") : PSTR("WIN\05\06"), false);
-
-    char buf[16];
-    current_wpm = get_current_wpm();
-    if (current_wpm < 10)
-        sprintf(buf, "WPM %d", current_wpm);
-    else if (current_wpm < 100)
-        sprintf(buf, "W  %d", current_wpm);
-    else
-        sprintf(buf, "W %d", current_wpm);
-    oled_set_cursor(0, 9);
-    oled_write_ln(buf, false);
-}
+#    include "pet.c"
+#    include "loop.c"
 
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
-    /*  if (is_keyboard_master()) {
-         return OLED_ROTATION_270;
-     } */
+    if (is_keyboard_master()) {
+        defer_exec(3000, pet_animation_phases, NULL);
+    }
+    else {
+        defer_exec(3000, loop_animation_phases, NULL);
+    }
     return OLED_ROTATION_270;
 }
 
 bool oled_task_user(void) {
-    // oled_clear();
     if (is_keyboard_master()) {
         render_status_modern();
         led_usb_state = host_keyboard_led_state();
-        render_luna(0, 13);
+        render_pet(0, 13);
     } else {
-        render_loop();
+        render_loop(0, 0);
     }
     return false;
 }
