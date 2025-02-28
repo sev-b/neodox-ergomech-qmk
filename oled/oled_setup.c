@@ -1,19 +1,25 @@
 // Sets up what the OLED screens display.
 
-#ifdef OLED_ENABLE
-#    include "progmem.h"
-#    include "status.c"
-#    include "animation_utils.c"
-#    include "pet.c"
-#    include "loop.c"
+#if defined(OLED_ENABLE) && OLED_ENABLE
+#include "progmem.h"
+#include "status.c"
+#include "animation_utils.c"
+#include "pet.c"
+    #if defined(RAW_ENABLE) && RAW_ENABLE
+    #include "volume.c"
+    #else
+    #include "loop.c"
+    #endif
 
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
     if (is_keyboard_master()) {
         defer_exec(3000, pet_animation_phases, NULL);
     }
-    else {
+    #if !defined(RAW_ENABLE) || !RAW_ENABLE
+    else if (loop_animation_phases) {
         defer_exec(3000, loop_animation_phases, NULL);
     }
+    #endif
     return OLED_ROTATION_270;
 }
 
@@ -28,7 +34,11 @@ bool oled_task_user(void) {
         render_status_modern();
         render_pet(0, 13);
     } else {
-        render_loop(0, 0);
+        #if defined(RAW_ENABLE) && RAW_ENABLE
+        render_volume();
+        #else
+        render_loop(0,0);
+        #endif
     }
     return false;
 }
