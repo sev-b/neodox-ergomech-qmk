@@ -1,7 +1,13 @@
-import sys
+import os
 import time
 from ctypes import cast, POINTER, CDLL
-CDLL("path/to/hidapi.dll")
+
+hidapi_path = os.getenv("HIDAPI_PATH")
+if not hidapi_path:
+    raise ValueError("HIDAPI_PATH environment variable is not set")
+
+CDLL(hidapi_path)
+
 import hid
 from comtypes import CLSCTX_ALL, COMObject, COMError
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume, IAudioEndpointVolumeCallback
