@@ -9,3 +9,5 @@ uint8_t map_volume(uint8_t volume);
 void render_volume(void);
 
 void set_volume(uint8_t *data);
+
+void process_received_data(uint8_t *data);

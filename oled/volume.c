@@ -27,42 +27,42 @@ void set_volume(uint8_t *data) {
     }
 }
 
-void via_custom_value_command_kb(uint8_t *data, uint8_t length) {
-    // data = [ command_id, channel_id, value_id, value_data ]
-    uint8_t *command_id        = &(data[0]);
-    uint8_t *channel_id        = &(data[1]);
+void process_received_data(uint8_t *data) {
+    uint8_t *command_id = &(data[0]);
+    uint8_t *channel_id = &(data[1]);
     uint8_t *value_id_and_data = &(data[2]);
 
     uprintf("Received data: command_id=%d, channel_id=%d, value_data=%d\n", *command_id, *channel_id, value_id_and_data[1]); // Debugging output
 
-    if ( *channel_id == id_custom_channel ) {
-        print("Received *channel_id == id_custom_channel"); // Debugging output
-        switch ( *command_id )
-        {
-            case id_custom_set_value:
-            {
+    if (*channel_id == id_custom_channel) {
+        switch (*command_id) {
+            case id_custom_set_value: {
                 set_volume(value_id_and_data);
                 break;
             }
-            default:
-            {
+            default: {
                 // Unhandled message.
                 *command_id = id_unhandled;
                 break;
             }
         }
-        return;
+    } else {
+        *command_id = id_unhandled;
     }
-    *command_id = id_unhandled;
+}
+
+void via_custom_value_command_kb(uint8_t *data, uint8_t length) {
+    process_received_data(data);
 }
 
 void raw_hid_receive_kb(uint8_t *data, uint8_t length) {
-    uprintf("raw_hid_receive_kb called with data[0]=%d\n", data[0]); // Debugging output
-    uint8_t *command_id = &(data[0]);
+    uprintf("raw_hid_receive_kb called with data: %d\n", *data); // Debugging output
+
+    process_received_data(&data[1]);
 
     // Due to an older version of via.c in Vial that does not support
     // id_custom_set/get_value, we use id_handled to invoke via_custom_value_command_kb.
-    if (*command_id == id_unhandled) {
+    if (data[0] == id_unhandled) {
         via_custom_value_command_kb(&data[1], length - 1);
     }
 }
