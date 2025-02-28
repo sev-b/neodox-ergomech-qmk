@@ -73,6 +73,7 @@ uint8_t map_volume(uint8_t volume) {
 }
 
 void render_volume(void) {
+    uprintf("render_volume: %d\n", current_volume); // Debugging output
     uint8_t mapped_volume = MAX_MAPPED_VOLUME - map_volume(current_volume); // 24-0
 
     oled_set_cursor(0, 1);

@@ -34,7 +34,7 @@ def send_volume(current_volume_percentage):
         return
     request_data = [0x00] * (report_length + 1) # First byte is Report ID
     # [ command_id, channel_id, value_id, value_data ]
-    request_data[1:5] = [0x07, 0, 0, current_volume_percentage]
+    request_data[2:5] = [0x07, 0x00, 0x00, current_volume_percentage]
     request_report = bytes(request_data)
     print(f"Sending data: {request_data}") # Debugging output
     print(f"Sending report: {request_report}") # Debugging output
