@@ -1,7 +1,7 @@
 import sys
 import time
 from ctypes import cast, POINTER, CDLL
-CDLL("C:/Data/Software/Source/hidapi-win/x64/hidapi.dll")
+CDLL("path/to/hidapi.dll")
 import hid
 from comtypes import CLSCTX_ALL, COMObject, COMError
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume, IAudioEndpointVolumeCallback
